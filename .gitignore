@@ -1,0 +1,27 @@
+# Python virtual environment
+venv/
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# SQLite database
+*.sqlite
+*.db
+
+# Environment variables
+.env
+
+# VS Code settings (optional)
+.vscode/
+
+# Node modules if frontend is here
+node_modules/
+
+# Build and dist folders
+dist/
+build/
+
+# Log files
+*.log
