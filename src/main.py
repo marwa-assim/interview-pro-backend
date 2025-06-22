@@ -23,7 +23,10 @@ app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'sta
 app.config['SECRET_KEY'] = 'interview-platform-secret-key-2024'
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-interview-platform'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
+    'DATABASE_URL', 
+    f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
