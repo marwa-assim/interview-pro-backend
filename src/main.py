@@ -1,5 +1,8 @@
 import os
 import sys
+# Fix for Render's postgres:// format
+if os.getenv("DATABASE_URL", "").startswith("postgres://"):
+    os.environ["DATABASE_URL"] = os.environ["DATABASE_URL"].replace("postgres://", "postgresql://", 1)
 # DON'T CHANGE THIS !!!
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
@@ -8,6 +11,10 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_migrate import Migrate
 from datetime import timedelta
+from flask_sqlalchemy import SQLAlchemy
+
+
+
 
 from src.models.user import db
 from src.routes.user import user_bp
@@ -23,7 +30,10 @@ app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'sta
 app.config['SECRET_KEY'] = 'interview-platform-secret-key-2024'
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string-interview-platform'
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    'DATABASE_URL',
+    f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
@@ -62,4 +72,4 @@ def serve(path):
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=False)
